@@ -213,7 +213,7 @@
                 tableBody.empty();
 
                 assets.forEach((asset) => {
-                    const calculatedValue = asset.assetValue * 0.18;
+                    const calculatedValue = asset.estimatedCost * 0.18;
                     tableBody.append(`
                         <tr>
                           
@@ -234,7 +234,7 @@
             <td data-label="Type (Fixed/Movable)">${asset.type}</td>
    
                           
-                            <td>${asset.assetCode}</td>
+                            <td>${asset.AssetCode}</td>
                           
                           
                           
@@ -286,7 +286,7 @@
             const renderAsset = (asset) => {
                 const tableBody = $('#assetTableBody');
                 tableBody.empty();
-                const calculatedValue = asset.assetValue * 0.18;
+                const calculatedValue = asset.estimatedCost * 0.18;
                 tableBody.append(`
                  
                 
@@ -309,7 +309,7 @@
             <td data-label="Owner's TIN">${asset.ownerTIN}</td>
             <td data-label="Type (Fixed/Movable)">${asset.type}</td>
    
-                        <td>${asset.assetCode}</td>
+                        <td>${asset.AssetCode}</td>
                    
 
 
@@ -335,7 +335,7 @@
                 `);
             };
 
-            const searchAsset = async (assetCode) => {
+            const searchAsset = async (AssetCode) => {
                 const response = await fetch('/searchAsset', {
                     method: 'POST',
                     headers: {
@@ -356,7 +356,7 @@
             $('#searchAssetForm').submit((event) => {
                 event.preventDefault();
                 const assetCode = $('#searchAssetInput').val();
-                searchAsset(assetCode);
+                searchAsset(AssetCode);
             });
         });
     </script>

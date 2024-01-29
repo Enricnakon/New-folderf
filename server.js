@@ -77,15 +77,12 @@ app.post('/rAsset', async (req, res) => {
        
        
         assetName: req.body.assetName,
-        assetValue: req.body.assetValue,
+        estimatedCost: req.body.estimatedCost,
         ownerTIN: req.body.ownerTIN,
         type: req.body.type,
-
+        AssetCode: generateRandomAssetCode()
         
- 
-        
-        assetCode: generateRandomAssetCode()
-    
+       
     
     
     
@@ -107,7 +104,7 @@ app.post('/rAsset', async (req, res) => {
 
     try {
         await assetData.save();
-        const alertMessage = `Asset registration successful! Your Asset Code is: ${assetData.assetCode}`;
+        const alertMessage = `Asset registration successful! Your Asset Code is: ${assetData.AssetCode}`;
         res.send(`<script>alert('${alertMessage}'); window.location.href='/rAsset';</script>`);
     } catch (error) {
         res.status(500).send('Error submitting asset registration form');

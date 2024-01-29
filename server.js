@@ -112,14 +112,20 @@ app.post('/rAsset', async (req, res) => {
 });
 
 // Route for searching tax payer by TIN
+// Route for searching tax payer by TIN
 app.post('/searchPayer', async (req, res) => {
     const tinToSearch = req.body.tin;
 
     try {
-        const result = await TaxPayerModel.findOne({ tin: tinToSearch });
+        let query = {};
+        if (tinToSearch) {
+            query = { tin: tinToSearch };
+        }
 
-        if (result) {
-            res.send(result);
+        const result = await TaxPayerModel.find(query);
+
+        if (result.length > 0) {
+            res.json(result);
         } else {
             res.status(404).send({ error: 'Payer not found', tin: tinToSearch });
         }
@@ -129,23 +135,27 @@ app.post('/searchPayer', async (req, res) => {
     }
 });
 
+
+ 
+// Route for searching asset by asset code
 // Route for searching asset by asset code
 app.post('/searchAsset', async (req, res) => {
-    const assetCodeToSearch = req.body.assetCode;
+    const AssetCodeToSearch = req.body.AssetCode;
 
     try {
-        const result = await AssetModel.findOne({ assetCode: assetCodeToSearch });
+        const result = await AssetModel.findOne({ AssetCode: AssetCodeToSearch });
 
         if (result) {
             res.json(result);
         } else {
-            res.status(404).send({ error: 'Asset not found', assetCode: assetCodeToSearch });
+            res.status(404).json({ error: 'Asset not found', AssetCode: AssetCodeToSearch });
         }
     } catch (error) {
         console.error('Error searching asset:', error);
-        res.status(500).send('Error searching asset');
+        res.status(500).json({ error: 'Error searching asset' });
     }
 });
+
 
 // Route for fetching tax payers
 app.get('/getTaxPayers', async (req, res) => {

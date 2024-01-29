@@ -17,29 +17,7 @@
                     <form id="assetRegistrationForm" action="/rAsset" method="post">
                        
                        
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                        
-
-
+ 
                         <label for="assetName">Asset Name:</label>
                         <input type="text" id="assetName" name="assetName" required>
                         <br>
@@ -62,36 +40,20 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
                         <button type="submit">Submit</button>
                     </form>
                 </div>
                 <div class="col-md-4">
                     <form id="searchAssetForm" class="form-inline pt-10">
-                        <input id="searchAssetInput" class="form-control mr-sm-2" type="search" placeholder="ENTER ASSET CODE" aria-label="Search">
+                        <input id="searchAssetInput" name="AssetCode" class="form-control mr-sm-2" type="search" placeholder="ENTER ASSET CODE" aria-label="Search">
                         <br><br>
                         <button class="btn btn-success" type="submit">SEARCH ASSET</button>
                     </form>
+                    
                 </div>
+                
             </div>
         </div>
 
@@ -130,14 +92,6 @@
    
    
    
-   
-   
-   
-   
-   
-   
-   
-   
  
     <td data-label="Asset Name"></td>
     <td data-label="Asset Value"></td>
@@ -147,36 +101,7 @@
  
     <td data-label="Asset Code"></td>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 </tr>
 
                     <!-- Asset data will be displayed here -->
@@ -207,134 +132,60 @@
     <script>
         $(document).ready(() => {
             let currentAssetPage = 1;
-
+    
             const renderAssets = (assets) => {
                 const tableBody = $('#assetTableBody');
                 tableBody.empty();
-
+    
                 assets.forEach((asset) => {
                     const calculatedValue = asset.estimatedCost * 0.18;
                     tableBody.append(`
                         <tr>
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
                             <td data-label="Asset Name">${asset.assetName}</td>
-            <td data-label="Calculated Value">${calculatedValue}</td>
-            <td data-label="Owner's TIN">${asset.ownerTIN}</td>
-            <td data-label="Type (Fixed/Movable)">${asset.type}</td>
-   
-                          
+                            <td data-label="Calculated Value">${calculatedValue}</td>
+                            <td data-label="Owner's TIN">${asset.ownerTIN}</td>
+                            <td data-label="Type (Fixed/Movable)">${asset.type}</td>
                             <td>${asset.AssetCode}</td>
-                          
-                          
-                          
-                          
-              
-                  
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              </tr>
+                        </tr>
                     `);
                 });
             };
-
+    
             const fetchAssets = async (page) => {
                 const response = await fetch(`/getAssets?page=${page}`);
                 const data = await response.json();
                 renderAssets(data.assets);
             };
-
+    
             fetchAssets(currentAssetPage);
-
+    
             $('#prevAssetPage').click(() => {
                 if (currentAssetPage > 1) {
                     currentAssetPage--;
                     fetchAssets(currentAssetPage);
                 }
             });
-
+    
             $('#nextAssetPage').click(() => {
                 currentAssetPage++;
                 fetchAssets(currentAssetPage);
             });
-
+    
             const renderAsset = (asset) => {
                 const tableBody = $('#assetTableBody');
                 tableBody.empty();
                 const calculatedValue = asset.estimatedCost * 0.18;
                 tableBody.append(`
-                 
-                
-                <tr>
-                
-                
-                
-        
-
-
-
-
-
-
-
-
-
-                    <td data-label="Asset Name">${asset.assetName}</td>
-            <td data-label="Calculated Value">${calculatedValue}</td>
-            <td data-label="Owner's TIN">${asset.ownerTIN}</td>
-            <td data-label="Type (Fixed/Movable)">${asset.type}</td>
-   
+                    <tr>
+                        <td data-label="Asset Name">${asset.assetName}</td>
+                        <td data-label="Calculated Value">${calculatedValue}</td>
+                        <td data-label="Owner's TIN">${asset.ownerTIN}</td>
+                        <td data-label="Type (Fixed/Movable)">${asset.type}</td>
                         <td>${asset.AssetCode}</td>
-                   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        </tr>
+                    </tr>
                 `);
             };
-
+    
             const searchAsset = async (AssetCode) => {
                 const response = await fetch('/searchAsset', {
                     method: 'POST',
@@ -343,7 +194,7 @@
                     },
                     body: JSON.stringify({ assetCode }),
                 });
-
+    
                 if (response.ok) {
                     const data = await response.json();
                     renderAsset(data);
@@ -352,13 +203,14 @@
                     alert('Asset not found');
                 }
             };
-
+    
             $('#searchAssetForm').submit((event) => {
                 event.preventDefault();
-                const assetCode = $('#searchAssetInput').val();
+                const AssetCode = $('#searchAssetInput').val();
                 searchAsset(AssetCode);
             });
         });
     </script>
+    
 </body>
 </html>

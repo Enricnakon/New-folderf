@@ -38,7 +38,7 @@ app.post('/rTpayer', async (req, res) => {
         dateOfBirth: req.body.dateOfBirth,
         occupation: req.body.occupation,
         gender: req.body.gender,
-        phoneNumber: req.body.gender,
+        phoneNumber: req.body.phoneNumber ,
         emailAddress: req.body.emailAddress,
         expectedAnnualIncome: req.body.expectedAnnualIncome,
         tin: generatedTIN
@@ -81,6 +81,7 @@ app.post('/rAsset', async (req, res) => {
         ownerTIN: req.body.ownerTIN,
         type: req.body.type,
 
+        
  
         
         assetCode: generateRandomAssetCode()

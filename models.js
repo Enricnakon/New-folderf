@@ -15,10 +15,10 @@ const taxpayerSchema = new mongoose.Schema({
 // Asset schema
 const assetSchema = new mongoose.Schema({
     assetName: { type: String, required: true },
-  estimatedCost: { type: Number, required: true },
-  ownerTIN: { type: String, required: true },
-  type: String,
-  assetNumber: String,
+    estimatedCost: { type: Number, required: true },
+    ownerTIN: { type: String, required: true },
+    type: { type: String, required: true },
+    AssetCode: { type: String, required: true }
 });
 
 // Income tax schema

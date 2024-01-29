@@ -15,26 +15,158 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-md-8">
-                    <!-- Feel free to delete the paragraph after implementation -->
-                    <p>Create an appropriate form to capture the payer's details as indicated in the description. Upon successfull registration, a TIN matching the criteria must be generated and communicated to the user in form of an alert.</p>
-                </div>
-                <div class="col-md-4">
-                        <form class="form-inline pt-10">
-                          <input class="form-control mr-sm-2" type="search" placeholder="ENTER TIN" aria-label="Search"> <br><br>
-                          <button class="btn btn-success" type="submit">SEARCH PAYER</button>
-                        </form>
+                    <form action="/rTpayer" method="post">
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                     
+                        
+
+
+
+<label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+
+    <label for="dateOfBirth">Date of Birth:</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth">
+    <br>
+
+    <label for="occupation">Occupation:</label>
+    <input type="text" id="occupation" name="occupation">
+    <br>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    <br>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber">
+    <br>
+
+    <label for="emailAddress">Email Address:</label>
+    <input type="email" id="emailAddress" name="emailAddress" required>
+    <br>
+
+    <label for="expectedAnnualIncome">Expected Annual Income:</label>
+    <input type="number" id="expectedAnnualIncome" name="expectedAnnualIncome">
+    <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <button type="submit">Submit</button>
+                        <div class="col-md-4">
+                            <form class="form-inline pt-10" action="/searchPayer" method="post">
+                                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="ENTER TIN" aria-label="Search">
+                                <br><br>
+                                <button class="btn btn-success" type="submit">SEARCH PAYER</button>
+                            </form>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="container">
         <div class="jumbotron">
             <h3 class="text-center">REGISTERED TAX PAYERS</h3>
             <div class="row">
-                <!-- Feel free to delete the paragraph after implementation -->
-                <p>Create a tabular view of the tax payers displaying the first 10 with navigation buttons to the next batch of 10 payers.</p>
-                <p>Upon search of a tax payer from the search field above, the searched payer should be the only one returned in the tabular view.</p>
+                <div class="container">
+                    <div class="jumbotron">
+                        <h3 class="text-center">REGISTERED TAX PAYERS</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Date of Birth</th>
+                                    <th scope="col">Occupation</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Email Address</th>
+                                    <th scope="col">Expected Annual Income</th>
+                                 
+                                    <th scope="col">TIN</th>
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                                </tr>
+                            </thead>
+                            <tbody id="taxPayersTableBody">
+                                <!-- Tax payer data will be displayed here -->
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li class="page-item" id="prevPage">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" id="nextPage">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -42,6 +174,89 @@
     <div class="row text-center">
         <a class="btn btn-primary" href="index.html">BACK HOME</a>
     </div>
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            let currentPage = 1;
+
+            const renderTaxPayers = (taxPayers) => {
+                const tableBody = $('#taxPayersTableBody');
+                tableBody.empty();
+
+                taxPayers.forEach((payer) => {
+                    tableBody.append(`
+                        <tr>
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                            <td>${payer.name}</td>
+            <td>${payer.dateOfBirth}</td>
+            <td>${payer.occupation}</td>
+            <td>${payer.gender}</td>
+            <td>${payer.phoneNumber}</td>
+            <td>${payer.emailAddress}</td>
+            <td>${payer.expectedAnnualIncome}</td>
+                           
+                            <td>${payer.tin}</td>
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+                            </tr>
+                    `);
+                });
+            };
+
+            const fetchTaxPayers = async (page) => {
+                const response = await fetch(`/getTaxPayers?page=${page}`);
+                const data = await response.json();
+                renderTaxPayers(data.taxPayers);
+            };
+
+            fetchTaxPayers(currentPage);
+
+            $('#prevPage').click(() => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    fetchTaxPayers(currentPage);
+                }
+            });
+
+            $('#nextPage').click(() => {
+                currentPage++;
+                fetchTaxPayers(currentPage);
+            });
+        });
+    </script>
+
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset transfer</title>
+    <title>Asset Transfer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
@@ -13,16 +13,43 @@
     <div class="container">
         <div class="jumbotron">
             <div class="row">
-                
-                    <!-- Feel free to delete the paragraph after implementation -->
-                    <p>Create an appropriate procedual form to facilitate the transfer of an asset. <small>Remember: </small> All we need is a field where to enter the Asset code <input type="text" name="" id="" placeholder="ASSET CODE">, the name of the asset is returned with a field of <br><br> TRANSFER TO: <input type="text" name="" id="" placeholder="NEW OWNER'S TIN">. A confirmation alert containing the asset name, name of current owner, and name of the new owner is displayed with a confirmation button. 
-                    <p>Upon confirmation, the asset owner must be updated accordingly in the data base and redirected back to the home page (index.html).</p></p>
+                <div class="col-md-6">
+                    <form id="transferAssetForm" action="/transferAsset" method="post">
+                        <div class="form-group">
+                            <label for="assetCode">Asset Code:</label>
+                            <input type="text" class="form-control" id="assetCode" name="assetCode" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newOwnerTIN">New Owner's TIN:</label>
+                            <input type="text" class="form-control" id="newOwnerTIN" name="newOwnerTIN" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Transfer Asset</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="row text-center">
-        <a class="btn btn-primary" href="index.html">BACK HOME</a>
-    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            $('#transferAssetForm').submit((event) => {
+                event.preventDefault();
+
+                const assetCode = $('#assetCode').val();
+                const newOwnerTIN = $('#newOwnerTIN').val();
+
+                const confirmationMessage = `Are you sure you want to transfer the asset with code ${assetCode} to the new owner with TIN ${newOwnerTIN}?`;
+
+                if (confirm(confirmationMessage)) {
+                    // Proceed with the transfer (you may use AJAX to send data to the server)
+                    alert('Asset transfer confirmed!'); // You can replace this with an AJAX call to the server
+                    window.location.href = 'index.html'; // Redirect to the home page
+                } else {
+                    alert('Asset transfer canceled.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

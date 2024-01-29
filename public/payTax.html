@@ -13,10 +13,47 @@
     <div class="container">
         <div class="jumbotron">
             <div class="row">
-                
-                    <!-- Feel free to delete the paragraph after implementation -->
-                    <p>Create an appropriate form to facilitate the payment of Income tax. <small>Remember: </small> All we need is a field where to enter the total profits made, then 18% of the profits is returned as the tax payable. A field requesting for the TIN is returned, TIN entered, and then the pay button is clicked to complete the process.</p>
-                    <p>Upon successful payment, a thank you alert containing the payer's name should be displayed.</p>
+                <!-- Form to facilitate the payment of Income tax -->
+                <form id="incomeTaxForm">
+                    <div class="form-group">
+                        <label for="totalProfits">Total Profits:</label>
+                        <input type="number" class="form-control" id="totalProfits" placeholder="Enter total profits" oninput="calculateTax()">
+                    </div>
+                    <div class="form-group">
+                        <label for="tin">TIN (Taxpayer Identification Number):</label>
+                        <input type="text" class="form-control" id="tin" placeholder="Enter TIN">
+                    </div>
+                    <div class="form-group">
+                        <label for="taxPayable">Tax Payable:</label>
+                        <input type="text" class="form-control" id="taxPayable" readonly>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="payIncomeTax()">Pay Income Tax</button>
+                </form>
+
+                <!-- JavaScript to calculate tax payable -->
+             <!-- JavaScript to calculate tax payable -->
+<script>
+    function calculateTax() {
+        // Get the total profits entered by the user
+        var totalProfits = parseFloat(document.getElementById('totalProfits').value);
+
+        // Calculate 18% of the total profits
+        var taxPayable = 0.18 * totalProfits;
+
+        // Display the calculated tax payable with two decimal places
+        document.getElementById('taxPayable').value = taxPayable.toFixed(2);
+    }
+
+    function payIncomeTax() {
+        // Get the payer's name (TIN) and tax payable amount
+        var tin = document.getElementById('tin').value;
+        var taxPayable = document.getElementById('taxPayable').value;
+
+        // Display a thank you alert
+        alert('Thank you, ' + tin + '! You have successfully paid $' + taxPayable + ' as income tax.');
+    }
+</script>
+
             </div>
         </div>
     </div>

@@ -6,6 +6,6 @@
   },
   "scripts": {
     "start": "server.js",
-    "build": "your-build-command-here"
+    "build": "echo 'No build step required'"
   }
 }

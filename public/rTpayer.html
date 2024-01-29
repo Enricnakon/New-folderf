@@ -15,20 +15,10 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-md-8">
+                   
+          
                     <form action="/rTpayer" method="post">
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                     
-                        
-
-
+   
 
 <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
@@ -61,61 +51,38 @@
     <input type="number" id="expectedAnnualIncome" name="expectedAnnualIncome">
     <br>
 
+                   <button type="submit">Submit</button>
+                </div>
+                    </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        <button type="submit">Submit</button>
                         <div class="col-md-4">
-                            <form class="form-inline pt-10" action="/searchPayer" method="post">
-                                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="ENTER TIN" aria-label="Search">
-                                <br><br>
-                                <button class="btn btn-success" type="submit">SEARCH PAYER</button>
-                            </form>
-                        </div>
+
+ 
+                            <div class="col-md-20">
+                                <form id="searchPayerForm" class="form-inline pt-10">
+                                    <input id="searchInput" name="tin" class="form-control mr-sm-2" type="search" placeholder="ENTER TIN" aria-label="Search">
+                                    <br><br>
+                                    <button class="btn btn-success" type="submit">SEARCH PAYER</button>
+                                </form>
+                                
+                            </div>
+                            
                     </form>
                 </div>
             </div>
         </div>
-    </div>
+ 
 
     <div class="container">
         <div class="jumbotron">
             <h3 class="text-center">REGISTERED TAX PAYERS</h3>
             <div class="row">
-                <div class="container">
-                    <div class="jumbotron">
-                        <h3 class="text-center">REGISTERED TAX PAYERS</h3>
+            
                         <table class="table">
                             <thead>
                                 <tr>
                                   
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
+                                   
                                   
                                     <th scope="col">Name</th>
                                     <th scope="col">Date of Birth</th>
@@ -128,22 +95,7 @@
                                     <th scope="col">TIN</th>
                              
                              
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
+                            
                              
                                 </tr>
                             </thead>
@@ -176,87 +128,87 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(() => {
-            let currentPage = 1;
+<script>
+    $(document).ready(() => {
+        let currentPage = 1;
 
-            const renderTaxPayers = (taxPayers) => {
-                const tableBody = $('#taxPayersTableBody');
-                tableBody.empty();
+        const renderTaxPayers = (taxPayers) => {
+            const tableBody = $('#taxPayersTableBody');
+            tableBody.empty();
 
-                taxPayers.forEach((payer) => {
-                    tableBody.append(`
-                        <tr>
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                            <td>${payer.name}</td>
-            <td>${payer.dateOfBirth}</td>
-            <td>${payer.occupation}</td>
-            <td>${payer.gender}</td>
-            <td>${payer.phoneNumber}</td>
-            <td>${payer.emailAddress}</td>
-            <td>${payer.expectedAnnualIncome}</td>
-                           
-                            <td>${payer.tin}</td>
-                        
+            taxPayers.forEach((payer) => {
+                tableBody.append(`
+                    <tr>
+                        <td>${payer.name}</td>
+                        <td>${payer.dateOfBirth}</td>
+                        <td>${payer.occupation}</td>
+                        <td>${payer.gender}</td>
+                        <td>${payer.phoneNumber}</td>
+                        <td>${payer.emailAddress}</td>
+                        <td>${payer.expectedAnnualIncome}</td>
+                        <td>${payer.tin}</td>
+                    </tr>
+                `);
+            });
+        };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            
-                            </tr>
-                    `);
-                });
-            };
-
-            const fetchTaxPayers = async (page) => {
+        const fetchTaxPayers = async (page) => {
+            try {
                 const response = await fetch(`/getTaxPayers?page=${page}`);
                 const data = await response.json();
-                renderTaxPayers(data.taxPayers);
-            };
 
-            fetchTaxPayers(currentPage);
-
-            $('#prevPage').click(() => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    fetchTaxPayers(currentPage);
+                if (response.ok) {
+                    renderTaxPayers(data.taxPayers);
+                } else {
+                    console.error('Error fetching tax payers:', data);
                 }
-            });
+            } catch (error) {
+                console.error('Error fetching tax payers:', error);
+            }
+        };
 
-            $('#nextPage').click(() => {
-                currentPage++;
-                fetchTaxPayers(currentPage);
-            });
+        fetchTaxPayers(currentPage);
+
+        $('#searchPayerForm').submit(async (event) => {
+            event.preventDefault();
+
+            const tinToSearch = $('#searchInput').val();
+
+            try {
+                const response = await fetch('/searchPayer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tin: tinToSearch }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    $('#taxPayersTableBody').empty();
+                    renderTaxPayers(data);
+                } else {
+                    console.error('Error searching payer:', data);
+                }
+            } catch (error) {
+                console.error('Error searching payer:', error);
+            }
         });
-    </script>
+
+        $('#prevPage').click(() => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchTaxPayers(currentPage);
+            }
+        });
+
+        $('#nextPage').click(() => {
+            currentPage++;
+            fetchTaxPayers(currentPage);
+        });
+    });
+</script>
 
 </body>
 </html>

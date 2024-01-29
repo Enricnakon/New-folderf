@@ -13,7 +13,7 @@ const taxpayerSchema = new mongoose.Schema({
 });
 
 // Asset schema
-const assetSchema = new mongoose.Schema({
+const AssetSchema = new mongoose.Schema({
     assetName: { type: String, required: true },
     estimatedCost: { type: Number, required: true },
     ownerTIN: { type: String, required: true },
@@ -33,7 +33,7 @@ const incomeTaxSchema = new mongoose.Schema({
 
 // Models
 const TaxPayerModel = mongoose.model('TaxPayer', taxpayerSchema);
-const AssetModel = mongoose.model('Asset', assetSchema);
+const AssetModel = mongoose.model('Asset', AssetSchema);
 const IncomeTaxModel = mongoose.model('IncomeTax', incomeTaxSchema);
 
 module.exports = { TaxPayerModel, AssetModel, IncomeTaxModel };

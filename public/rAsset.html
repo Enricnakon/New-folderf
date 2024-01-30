@@ -45,7 +45,7 @@
                         <button type="submit">Submit</button>
                     </form>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-12">
                     <form id="searchAssetForm" class="form-inline pt-10">
                         <input id="searchAssetInput" name="AssetCode" class="form-control mr-sm-2" type="search" placeholder="ENTER ASSET CODE" aria-label="Search">
                         <br><br>
@@ -64,18 +64,13 @@
                     <tr>
                       
                        
-                       
-                       
-                       
-                       
+                         
                         <th scope="col">Asset Name</th>
                         <th scope="col">Asset Value</th>
                         <th scope="col">Owner's TIN</th>
                         <th scope="col">Type (Fixed/Movable)</th>
                        
-
-                       
-                       
+   
                        
                         <th scope="col">Asset Code</th>
                     </tr>
@@ -192,7 +187,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ assetCode }),
+                    body: JSON.stringify({AssetCode}),
                 });
     
                 if (response.ok) {

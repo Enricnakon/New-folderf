@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+ const mongoose = require('mongoose');
 
 // Tax payer schema
 const taxpayerSchema = new mongoose.Schema({

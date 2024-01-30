@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 // Assuming these are your existing models
-const { TaxPayerModel, AssetModel,IncomeTaxModel } = require('./models');
- 
+const { TaxPayerModel, AssetModel, IncomeTaxModel } = require('./models');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,28 +28,15 @@ app.post('/rTpayer', async (req, res) => {
     const generatedTIN = generateRandomTIN();
 
     const taxpayerData = new TaxPayerModel({
-       
-
-       
-
-
         name: req.body.name,
         dateOfBirth: req.body.dateOfBirth,
         occupation: req.body.occupation,
         gender: req.body.gender,
-        phoneNumber: req.body.phoneNumber ,
+        phoneNumber: req.body.phoneNumber,
         emailAddress: req.body.emailAddress,
         expectedAnnualIncome: req.body.expectedAnnualIncome,
         tin: generatedTIN
-    
-
-
-
-
-
-
     });
-
 
     try {
         await taxpayerData.save();
@@ -68,39 +54,12 @@ app.get('/rAsset', (req, res) => {
 // Route for handling asset registration
 app.post('/rAsset', async (req, res) => {
     const assetData = new AssetModel({
-       
-       
-       
-       
-       
-       
-       
-       
         assetName: req.body.assetName,
         estimatedCost: req.body.estimatedCost,
         ownerTIN: req.body.ownerTIN,
         type: req.body.type,
         AssetCode: generateRandomAssetCode()
-        
-       
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     });
-
 
     try {
         await assetData.save();
@@ -111,7 +70,35 @@ app.post('/rAsset', async (req, res) => {
     }
 });
 
-// Route for searching tax payer by TIN
+// Route for serving the income tax payment form
+app.get('/payIncomeTax', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'payTax.html'));
+});
+
+// Route for handling income tax payment
+app.post('/payIncomeTax', async (req, res) => {
+    const { totalProfits, tin, taxPayable } = req.body;
+
+    try {
+        // Update TaxPayerModel with payment information
+        const taxpayer = await TaxPayerModel.findOne({ tin });
+
+        if (taxpayer) {
+            taxpayer.totalProfits = totalProfits;
+            taxpayer.taxPayable = taxPayable;
+            await taxpayer.save();
+
+            // Send a thank you alert
+            res.send(`<script>alert('Thank you, ${taxpayer.name}! You have successfully paid $${taxPayable} as income tax.'); window.location.href='/payIncomeTax';</script>`);
+        } else {
+            res.status(404).send({ error: 'Taxpayer not found', tin });
+        }
+    } catch (error) {
+        console.error('Error recording income tax payment:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 // Route for searching tax payer by TIN
 app.post('/searchPayer', async (req, res) => {
     const tinToSearch = req.body.tin;
@@ -135,9 +122,6 @@ app.post('/searchPayer', async (req, res) => {
     }
 });
 
-
- 
-// Route for searching asset by asset code
 // Route for searching asset by asset code
 app.post('/searchAsset', async (req, res) => {
     const AssetCodeToSearch = req.body.AssetCode;
@@ -155,7 +139,6 @@ app.post('/searchAsset', async (req, res) => {
         res.status(500).json({ error: 'Error searching asset' });
     }
 });
-
 
 // Route for fetching tax payers
 app.get('/getTaxPayers', async (req, res) => {
@@ -184,28 +167,6 @@ app.get('/getAssets', async (req, res) => {
     } catch (error) {
         console.error('Error fetching assets:', error);
         res.status(500).send('Error fetching assets');
-    }
-});
-
-// Route for recording income tax payment
-app.post('/payIncomeTax', async (req, res) => {
-    const { tin, totalProfits, taxPayable } = req.body;
-
-    try {
-        // Save the payment details to the database
-        const paymentData = new IncomeTaxModel({
-            tin,
-            totalProfits,
-            taxPayable
-        });
-
-        await paymentData.save();
-
-        // Send a response to the client
-        res.status(200).json({ message: 'Income tax payment recorded successfully' });
-    } catch (error) {
-        console.error('Error recording income tax payment:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
